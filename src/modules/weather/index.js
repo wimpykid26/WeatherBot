@@ -52,7 +52,7 @@ export const weatherController = async (LUISResponse, channelId) => {
                     uri: 'api.openweathermap.org/data/2.5/weather',
                     qs:
                     {
-                        'APPID': 'e101c80f28e7c194f52d9415e4be26f1',
+                        APPID: 'e101c80f28e7c194f52d9415e4be26f1',
                         q: city
                     },
                 };
@@ -73,7 +73,13 @@ export const weatherController = async (LUISResponse, channelId) => {
             }
         }
         else {
-            //Call api with LatLng
+            //Raise error response about location not being found
+            const response = {
+                response_type: 'in_channel',
+                channel: slackReqObj.channel_id,
+                text: 'Please specify a location',
+            };
+            return response;
         }
     }
 }
