@@ -27,8 +27,9 @@ export const getIntentEntity = async (slackReqBody) => {
 };
 
 export const parseLUISResponse = (LUISResponse) => {
-    intent = LUISResponse.topScoringIntent.intent;
-    entities = [];
+    LUISResponse = JSON.parse(LUISResponse);
+    let intent = LUISResponse.topScoringIntent.intent;
+    let entities = [];
     LUISResponse.entities.map(function parseEntity(entity) {
         if (entity.type.indexOf('geographyV2') > -1) {
             entities.push({ type: 'City', value: entity.entity });
@@ -41,6 +42,7 @@ export const parseLUISResponse = (LUISResponse) => {
 
 export const weatherController = async (LUISResponse, channelId) => {
     let { intent, entities } = parseLUISResponse(LUISResponse);
+
     if (intent == 'Weather.CheckWeatherValue' || 'Weather.QueryWeather') {
         //Check for places, if not use current LatLng
         let placeIndex = entities.findIndex(x => x.type == 'City');
@@ -49,7 +51,7 @@ export const weatherController = async (LUISResponse, channelId) => {
             let city = entities[placeIndex].value;
             try {
                 var options = {
-                    uri: 'api.openweathermap.org/data/2.5/weather',
+                    uri: 'https://api.openweathermap.org/data/2.5/weather',
                     qs:
                     {
                         APPID: 'e101c80f28e7c194f52d9415e4be26f1',
@@ -60,8 +62,10 @@ export const weatherController = async (LUISResponse, channelId) => {
                     rp(options)
                         .then(function (openWeatherResponse) {
                             //Construct Slack Response
-                            attachment = parseOpenWeatherResponse(openWeatherResponse, city, 'celsius');
-                            SLACKResponse = constructSlackResponse(intent, attachment, channelId);
+                            openWeatherResponse = JSON.parse(openWeatherResponse)
+                            let attachment = parseOpenWeatherResponse(openWeatherResponse, city, 'celsius');
+                            let SLACKResponse = constructSlackResponse(intent, attachment, 'Halluejah', channelId);
+                            console.log(SLACKResponse);
                             resolve(SLACKResponse)
                         })
                         .catch(function (err) {
@@ -76,7 +80,7 @@ export const weatherController = async (LUISResponse, channelId) => {
             //Raise error response about location not being found
             const response = {
                 response_type: 'in_channel',
-                channel: slackReqObj.channel_id,
+                channel: channelId,
                 text: 'Please specify a location',
             };
             return response;

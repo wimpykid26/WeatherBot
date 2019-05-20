@@ -54,59 +54,59 @@ export const constructSlackResponse = (intent, attachment, text, channelId) => {
     attachmentObj.color = "#2eb886";
     attachmentObj.pretext = "Here is the result of your query";
     if (intent = "Weather.CheckWeatherValue") {
-        let dateString = moment.unix(attachmentObj.dateTime).format("MM/DD/YYYY");
-        attachmentObj.title = `Weather for ${attachmentObj.city} on ${dateString} :`;
+        let dateString = moment.unix(attachment.dateTime).format("MM/DD/YYYY");
+        attachmentObj.title = `Weather for ${attachment.city} on ${dateString} :`;
     }
     attachmentObj.fields = [
         {
             "title": "Unit",
-            "value": attachmentObj.unit,
+            "value": attachment.unit,
             "short": true
         },
         {
             "title": "Condition",
-            "value": attachmentObj.conditionDescription,
+            "value": attachment.conditionDescription,
             "short": false
         },
         {
             "title": "Description",
-            "value": attachmentObj.condition,
+            "value": attachment.condition,
             "short": false
         },
         {
             "title": "Temperature",
-            "value": attachmentObj.temperature,
+            "value": attachment.temperature,
             "short": true
         },
         {
             "title": "Maximum Temperature",
-            "value": attachmentObj.tempMax,
+            "value": attachment.tempMax,
             "short": true
         },
         {
             "title": "Minimum Temperature",
-            "value": attachmentObj.tempMin,
+            "value": attachment.tempMin,
             "short": true
         },
         {
             "title": "Pressure",
-            "value": attachmentObj.pressure,
+            "value": attachment.pressure,
             "short": true
         },
         {
             "title": "Humidity",
-            "value": attachmentObj.humidity,
+            "value": attachment.humidity,
             "short": true
         },
         {
             "title": "Wind Speed",
-            "value": attachmentObj.windSpeed,
+            "value": attachment.windSpeed,
             "short": true
         }
     ]
-    attachment.footer = "Powered by OpenWeather";
-    attachment.footer_icon = "https://platform.slack-edge.com/img/default_application_icon.png";
-    attachment.thumb_url = attachmentObj.imageUrl;
-    response.attachment = [attachmentObj];
+    attachmentObj.footer = "Powered by OpenWeather";
+    attachmentObj.footer_icon = "https://platform.slack-edge.com/img/default_application_icon.png";
+    attachmentObj.thumb_url = attachment.imageUrl;
+    response.attachments = [attachmentObj];
     return response;
 }
