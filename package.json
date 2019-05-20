@@ -23,6 +23,7 @@
     "eslint-plugin-import": "^2.17.2",
     "express": "^4.17.0",
     "mkdirp": "^0.5.1",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
